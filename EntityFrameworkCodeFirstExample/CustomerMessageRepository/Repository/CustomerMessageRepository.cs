@@ -1,14 +1,33 @@
 ﻿using CustomerMessageApplication.DTOs;
 using CustomerMessageApplication.Interfaces;
+using CustomerMessageRepository.DatabaseModel;
+using CustomerMessageRepository.Entities;
 using System.Threading.Tasks;
 
 namespace CustomerMessageRepository.Repository
 {
     public class CustomerMessageRepository : ICustomerMessageRepository
     {
-        public Task SaveMesssage(CustomerMessageDTO message)
+        private readonly CustomerMessageDbContext _context;
+
+        public CustomerMessageRepository(CustomerMessageDbContext context)
         {
-            throw new System.NotImplementedException();
+            _context = context;
+        }
+
+        public async Task SaveMesssage(CustomerMessageDTO messageDto)
+        {
+            var message = new CustomerMessage
+            {
+                Email = messageDto.Email,
+                IdCustomerMessage = messageDto.IdCustomerMessage,
+                Message = messageDto.Message,
+                Name = messageDto.Name
+            };
+
+            _context.CustomerMessages.Add(message);
+
+            _context.SaveChangesAsync();
         }
     }
 }

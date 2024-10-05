@@ -1,7 +1,10 @@
-﻿namespace CustomerMessageRepository.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CustomerMessageRepository.Entities
 {
     public class CustomerMessage
     {
+        [Key]
         public int IdCustomerMessage { get; set; }
 
         public string Name { get; set; }
