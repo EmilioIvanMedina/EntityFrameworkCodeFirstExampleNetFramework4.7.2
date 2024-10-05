@@ -1,4 +1,6 @@
-﻿using EntityFrameworkCodeFirstPresentation.ViewModels;
+﻿using CustomerMessageApplication.DTOs;
+using CustomerMessageApplication.Interfaces;
+using EntityFrameworkCodeFirstPresentation.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,13 @@ namespace EntityFrameworkCodeFirstPresentation.Controllers
 {
     public class ContactController : Controller
     {
+        private readonly ICustomerMessageRepository _customerMessageRepository;
+
+        public ContactController(ICustomerMessageRepository customerMessageRepository)
+        {
+            _customerMessageRepository = customerMessageRepository;
+        }
+
         public ActionResult Index()
         {
             var model = new ContactMessageViewModel();
@@ -21,6 +30,17 @@ namespace EntityFrameworkCodeFirstPresentation.Controllers
         {
             if(ModelState.IsValid)
             {
+                var message = new CustomerMessageDTO
+                {
+                    Email = model.Email,
+                    Message = model.Message,
+                    Name = model.Name
+                };
+
+                _customerMessageRepository.SaveMesssage(message);
+
+                model = new ContactMessageViewModel();
+
                 ViewBag.Message = "Your message has been sent!";
             }
 
